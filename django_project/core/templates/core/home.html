@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <!-- Приветственный блок -->
+    <div class="row">
+        <div class="col">
+            <img src="{% static 'core/images/logo.png' %}" alt="Sәttj Cafe Logo" class="img-fluid mb-3">
+            <h1>Добро пожаловать в Sәttj Cafe!</h1>
+            <p class="lead">Лучшие блюда и уютная атмосфера в самом сердце города.</p>
+        </div>
+    </div>
+
+    <!-- Слайдер с акциями -->
+    <div id="promoCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'core/images/photo1.jpg' %}" class="d-block mx-auto" alt="Акция 1" style="max-width: 30%; height: auto;>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Скидка 20% на все завтраки</h5>
+                    <p>С 8:00 до 11:00 каждый день.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'core/images/photo2.jpg' %}" class="d-block mx-auto" alt="Акция 2" style="max-width: 30%; height: auto;>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Новое сезонное меню</h5>
+                    <p>Попробуйте блюда от нашего шеф-повара.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'core/images/photo3.jpg' %}" class="d-block mx-auto" alt="Акция 3" style="max-width: 30%; height: auto;>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Каждый третий кофе бесплатно</h5>
+                    <p>Только в марте!</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+{% endblock %}

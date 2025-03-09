@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-3 text-center">Меню</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Блюдо">
+                <div class="card-body">
+                    <h5 class="card-title">Блюдо 1</h5>
+                    <p class="card-text">Описание вкусного блюда.</p>
+                    <a href="#" class="btn btn-primary">Заказать</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Блюдо">
+                <div class="card-body">
+                    <h5 class="card-title">Блюдо 2</h5>
+                    <p class="card-text">Описание еще одного блюда.</p>
+                    <a href="#" class="btn btn-primary">Заказать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

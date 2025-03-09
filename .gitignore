@@ -19,7 +19,6 @@ __pycache__/
 
 # Исключаем настройки IDE
 .idea/
-.vscode/
 
 # Исключаем файлы статики и миграций (если используешь `collectstatic`)
 staticfiles/

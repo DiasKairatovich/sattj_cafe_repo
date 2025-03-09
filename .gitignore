@@ -1,4 +1,32 @@
-db.sqlite3
+# Исключаем виртуальное окружение
 venv/
+.env
+
+# Исключаем файлы базы данных
+db.sqlite3
+*.sqlite3
+
+# Исключаем временные файлы Django
 __pycache__/
+*.py[cod]
+
+# Исключаем логи и файлы кеша
+*.log
+*.pot
 *.pyc
+*.swp
+*.swo
+
+# Исключаем настройки IDE
+.idea/
+.vscode/
+
+# Исключаем файлы статики и миграций (если используешь `collectstatic`)
+staticfiles/
+media/
+*.bak
+
+# Исключаем зависимости (если используешь `pip freeze > requirements.txt`)
+Pipfile
+Pipfile.lock
+poetry.lock

@@ -1,5 +1,5 @@
 """
-ASGI config for site_sattj_cafe project.
+ASGI config for sattj_cafe_django project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'site_sattj_cafe.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sattj_cafe_django.settings')
 
 application = get_asgi_application()

@@ -1,5 +1,5 @@
 """
-WSGI config for site_sattj_cafe project.
+WSGI config for sattj_cafe_django project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'site_sattj_cafe.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sattj_cafe_django.settings')
 
 application = get_wsgi_application()

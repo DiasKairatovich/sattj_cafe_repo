@@ -1,31 +1,123 @@
 {% extends "base.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'menu/css/style.css' %}">
 
 {% block title %}Меню{% endblock %}
 
 {% block content %}
 <div class="container">
+    <!-- Фильтр и поиск -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <select id="categoryFilter" class="form-select">
+                <option value="all">Все категории</option>
+                <option value="snacks">Закуски</option>
+                <option value="main">Основные блюда</option>
+                <option value="dessert">Десерты</option>
+                <option value="drinks">Напитки</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="Поиск по меню...">
+        </div>
+    </div>
+
     <h1 class="mt-4 mb-3 text-center">Меню</h1>
+
+    <!-- Меню с категориями -->
     <div class="row">
-        <div class="col-md-4">
+        <!-- Закуски -->
+        <div class="col-md-4 menu-item snacks">
             <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Блюдо">
+                <img src="{% static 'menu/images/brucela_tomato.jpg' %}" class="card-img-top" alt="Закуска">
                 <div class="card-body">
-                    <h5 class="card-title">Блюдо 1</h5>
-                    <p class="card-text">Описание вкусного блюда.</p>
-                    <a href="#" class="btn btn-primary">Заказать</a>
+                    <h5 class="card-title">Брускетта с томатами</h5>
+                    <p class="card-text">Свежие томаты, базилик, оливковое масло.</p>
+                    <p class="price"><strong>Цена: 1200₸</strong></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+
+        <!-- Основные блюда -->
+        <div class="col-md-4 menu-item main">
             <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Блюдо">
+                <img src="{% static 'menu/images/steak_beef.jpg' %}" class="card-img-top" alt="Основное блюдо">
                 <div class="card-body">
-                    <h5 class="card-title">Блюдо 2</h5>
-                    <p class="card-text">Описание еще одного блюда.</p>
-                    <a href="#" class="btn btn-primary">Заказать</a>
+                    <h5 class="card-title">Стейк из говядины</h5>
+                    <p class="card-text">Сочное мясо, приготовленное на гриле.</p>
+                    <p class="price"><strong>Цена: 3200₸</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Десерты -->
+        <div class="col-md-4 menu-item dessert">
+            <div class="card">
+                <img src="{% static 'menu/images/chees_cake.jpg' %}" class="card-img-top" alt="Десерт">
+                <div class="card-body">
+                    <h5 class="card-title">Чизкейк</h5>
+                    <p class="card-text">Классический чизкейк с ягодами.</p>
+                    <p class="price"><strong>Цена: 1300₸</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 menu-item dessert">
+            <div class="card">
+                <img src="{% static 'menu/images/tiramisu.jpg' %}" class="card-img-top" alt="Десерт">
+                <div class="card-body">
+                    <h5 class="card-title">Тирамису</h5>
+                    <p class="card-text">Нежный десерт с кофейным ароматом.</p>
+                    <p class="price"><strong>Цена: 900₸</strong></p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Напитки -->
+        <div class="col-md-4 menu-item drinks">
+            <div class="card">
+                <img src="{% static 'menu/images/limonade.jpg' %}" class="card-img-top" alt="Напиток">
+                <div class="card-body">
+                    <h5 class="card-title">Лимонад</h5>
+                    <p class="card-text">Свежевыжатый лимонад с мятой.</p>
+                    <p class="price"><strong>Цена: 1500₸</strong></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Фильтрация и поиск -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoryFilter = document.getElementById("categoryFilter");
+        const searchInput = document.getElementById("searchInput");
+        const menuItems = document.querySelectorAll(".menu-item");
+
+        // Фильтр по категориям
+        categoryFilter.addEventListener("change", function () {
+            const selectedCategory = this.value;
+            menuItems.forEach(item => {
+                if (selectedCategory === "all" || item.classList.contains(selectedCategory)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+
+        // Поиск по меню
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            menuItems.forEach(item => {
+                const title = item.querySelector(".card-title").innerText.toLowerCase();
+                if (title.includes(query)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

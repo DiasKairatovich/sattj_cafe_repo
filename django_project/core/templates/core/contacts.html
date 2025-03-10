@@ -1,8 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>Контакты</h1>
-    <p>Наш адрес: г. Алматы, ул. Достык, 55</p>
-    <p>Телефон: +7 (777) 123-45-67</p>
-    <p>Email: info@sattjcafe.kz</p>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Контакты</h1>
+
+    <div class="row">
+        <!-- Контактная информация -->
+        <div class="col-md-6">
+            <h3>Наши контакты</h3>
+            <p><strong>Адрес:</strong> г. Астана, пр-т. Мангилик Ел. 16</p>
+            <p><strong>Телефон:</strong> <a href="tel:+77771234567">+7 (701) 016-70-16</a></p>
+            <p><strong>Email:</strong> <a href="mailto:info@sattjcafe.kz">info@sattjcafe.kz</a></p>
+
+            <h3 class="mt-4">Часы работы</h3>
+            <ul class="list-unstyled">
+                <li><strong>Понедельник - Пятница:</strong> 08:00 - 22:00</li>
+                <li><strong>Суббота - Воскресенье:</strong> 09:00 - 23:00</li>
+            </ul>
+
+            <!-- Социальные сети -->
+            <h3 class="mt-4">Мы в соцсетях</h3>
+            <div class="d-flex gap-3">
+                <!-- WhatsApp -->
+                <a href="https://wa.me/77010167016" target="_blank" class="text-success fs-2">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/sattjcafe" target="_blank" class="text-danger fs-2">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Карта -->
+        <div class="col-md-6">
+            <h3>Мы на карте</h3>
+            <div class="ratio ratio-16x9">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1057.1939184025573!2d71.43523127398696!3d51.11799702583935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4245869eeae29b5d%3A0x3231a08efe5e4d35!2sSattj!5e0!3m2!1sru!2skz!4v1741632465939!5m2!1sru!2skz"
+                        width="600"
+                        height="450"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

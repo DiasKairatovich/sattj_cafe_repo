@@ -5,25 +5,55 @@
 {% block content %}
 <div class="container">
     <h2 class="mt-4">Ваша корзина</h2>
-    {% if cart %}
-        <ul class="list-group">
-            {% for item, quantity in cart.items %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <strong>{{ item }}</strong>
-
-                    <div class="quantity-container">
-                        <button class="quantity-btn decrease" data-name="{{ item }}">-</button>
-                        <span class="quantity">{{ quantity }}</span>
-                        <button class="quantity-btn increase" data-name="{{ item }}">+</button>
-                    </div>
-
-                    <button class="btn btn-danger remove-item" data-name="{{ item }}">Удалить</button>
-                </li>
-            {% endfor %}
+    <div id="cart-container">
+        <ul id="cart-items" class="list-group">
+            {% if cart %}
+                {% for item, quantity in cart.items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ item }} ({{ quantity }})
+                        <button class="btn btn-danger btn-sm remove-from-cart" data-name="{{ item }}">Удалить</button>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p id="empty-cart-message">Ваша корзина пуста.</p>
+            {% endif %}
         </ul>
-        <a href="#" class="btn btn-success mt-3">Оплатить</a>
-    {% else %}
-        <p>Ваша корзина пуста.</p>
-    {% endif %}
+        {% if cart %}
+            <a href="#" class="btn btn-success mt-3" id="checkout-btn">Оплатить</a>
+        {% else %}
+            <a href="#" class="btn btn-success mt-3" id="checkout-btn" style="display: none;">Оплатить</a>
+        {% endif %}
+    </div>
 </div>
+
+<!-- Скрипт для удаления из корзины -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cartItems = document.getElementById("cart-items");
+    const emptyMessage = document.getElementById("empty-cart-message");
+    const checkoutBtn = document.getElementById("checkout-btn");
+
+    document.querySelectorAll(".remove-from-cart").forEach(button => {
+        button.addEventListener("click", function () {
+            const name = this.getAttribute("data-name");
+
+            fetch("/cart_api/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1]
+                },
+                body: JSON.stringify({ action: "remove", name: name })
+            }).then(response => response.json()).then(data => {
+                this.parentElement.remove();
+                if (cartItems.children.length === 0) {
+                    emptyMessage.style.display = "block";
+                    checkoutBtn.style.display = "none";
+                }
+            });
+        });
+    });
+});
+</script>
+
 {% endblock %}

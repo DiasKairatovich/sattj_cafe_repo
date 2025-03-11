@@ -25,44 +25,46 @@
 
     <h1 class="mt-4 mb-3 text-center">Меню</h1>
 
-    <!-- Меню с категориями -->
-    <div class="row">
-        {% for item in menu_items %}
-        <div class="col-md-4 menu-item" data-category="{{ item.category }}">
-            <div class="card">
-                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.name }}</h5>
-                    <p class="card-text">{{ item.description }}</p>
-                    <p class="price"><strong>Цена: {{ item.price }}₸</strong></p>
+    <!-- Проверка на пустой список -->
+    {% if menu_items %}
+        <div class="row">
+            {% for item in menu_items %}
+            <div class="col-md-4 menu-item" data-category="{{ item.category }}">
+                <div class="card">
+                    <img src="{% static item.image %}" class="card-img-top" alt="{{ item.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">{{ item.description }}</p>
+                        <p class="price"><strong>Цена: {{ item.price }}₸</strong></p>
 
-                    <!-- Поле для выбора количества -->
-                    <div class="quantity-container">
-                        <button class="quantity-btn decrease" data-name="{{ item.name }}">-</button>
-                        <span class="quantity" data-name="{{ item.name }}">1</span>
-                        <button class="quantity-btn increase" data-name="{{ item.name }}">+</button>
+                        <!-- Поле для выбора количества -->
+                        <div class="quantity-container">
+                            <button class="quantity-btn decrease" data-id="{{ forloop.counter }}">-</button>
+                            <span class="quantity" data-id="{{ forloop.counter }}">1</span>
+                            <button class="quantity-btn increase" data-id="{{ forloop.counter }}">+</button>
+                        </div>
+
+                        <!-- Кнопка добавления в корзину -->
+                        <button class="btn btn-primary add-to-cart"
+                                data-id="{{ forloop.counter }}"
+                                data-name="{{ item.name }}"
+                                data-price="{{ item.price }}">
+                            Добавить в корзину
+                        </button>
                     </div>
-
-                    <!-- Кнопка добавления в корзину -->
-                    <button class="btn btn-primary add-to-cart"
-                            data-name="{{ item.name }}"
-                            data-price="{{ item.price }}">
-                        Добавить в корзину
-                    </button>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    {% else %}
+        <p class="text-center mt-4">Меню пока пусто.</p>
+    {% endif %}
 </div>
 
 <!-- Иконка корзины -->
 <a href="{% url 'cart' %}" class="cart-icon">
     <i class="bi bi-cart-fill"></i>
 </a>
-
-<!-- Скрипт для работы корзины -->
-<script src="{% static 'menu/js/cart.js' %}"></script>
 
 <!-- Скрипт для фильтрации по категориям -->
 <script src="{% static 'menu/js/filter.js' %}"></script>

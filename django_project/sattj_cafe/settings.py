@@ -101,6 +101,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"  # или другой бекенд
+SESSION_COOKIE_AGE = 86400  # 1 день (по желанию)
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

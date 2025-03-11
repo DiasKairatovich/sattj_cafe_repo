@@ -1,10 +1,11 @@
 from django.shortcuts import render
 import json
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_http_methods
 
 def menu_list(request):
+    """Рендерит страницу с меню."""
     menu_items = [
         {"name": "Брускетта с томатами", "description": "Свежие томаты, базилик, оливковое масло.",
          "price": 1200, "category": "snacks", "image": "menu/images/brucela_tomato.jpg"},
@@ -21,66 +22,46 @@ def menu_list(request):
     ]
     return render(request, 'menu/menu_list.html', {'menu_items': menu_items})
 
-@csrf_exempt
-def add_to_cart(request):
-    if request.method == "POST":
-        try:
-            # Исправляем: Убедимся, что cart - это словарь
-            cart = request.session.get("cart", {})
-
-            if not isinstance(cart, dict):  # Если cart вдруг оказался списком — заменим его
-                cart = {}
-
-            data = json.loads(request.body)
-            name = data["name"] # получаем название
-            quantity = int(data.get("quantity", 1))  # Получаем количество
-
-            if name in cart:
-                cart[name] += quantity  # Увеличиваем количество
-            else:
-                cart[name] = quantity  # Добавляем новый товар
-
-            request.session["cart"] = cart  # Сохраняем в сессии
-            request.session.modified = True  # Явно указываем, что сессия изменилась
-
-            return JsonResponse({"status": "success", "cart": cart})
-        except json.JSONDecodeError:
-            return JsonResponse({"status": "error", "message": "Ошибка в JSON"}, status=400)
-
-    return JsonResponse({"status": "error", "message": "Неверный запрос"}, status=400)
-
-def update_cart(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        name = data.get("name")
-        change = data.get("change")
-
+@require_http_methods(["GET", "POST"])
+@csrf_protect
+def cart_api(request):
+    """API для работы с корзиной."""
+    if request.method == "GET":
         cart = request.session.get("cart", {})
+        total_price = sum(item["price"] * quantity for item, quantity in cart.items())
+        return JsonResponse({"cart": cart, "total_price": total_price})
 
-        if name in cart:
-            cart[name] += change
-            if cart[name] <= 0:
-                del cart[name]  # Если количество <= 0, удаляем товар
-            request.session["cart"] = cart
-
-        return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "error"}, status=400)
-
-def remove_from_cart(request):
-    if request.method == "POST":
+    try:
         data = json.loads(request.body)
-        name = data.get("name")
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Неверный формат JSON"}, status=400)
 
-        cart = request.session.get("cart", {})
+    cart = request.session.get("cart", {})
 
+    action = data.get("action")
+    name = data.get("name")
+    quantity = int(data.get("quantity", 1))
+
+    if not name:
+        return JsonResponse({"error": "Имя товара обязательно"}, status=400)
+
+    if action == "add":
+        cart[name] = cart.get(name, 0) + quantity
+    elif action == "remove":
+        cart.pop(name, None)
+    elif action == "update":
         if name in cart:
-            del cart[name]  # Полностью удаляем товар
-            request.session["cart"] = cart
+            cart[name] = max(0, cart[name] + quantity)
+            if cart[name] == 0:
+                del cart[name]
 
-        return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "error"}, status=400)
+    request.session["cart"] = cart
+    request.session.modified = True
+
+    return JsonResponse({"cart": cart})
 
 def cart_view(request):
-    cart = request.session.get('cart', {})  # Достаем корзину из сессии
+    """Рендерит страницу корзины."""
+    cart = request.session.get('cart', {})
     return render(request, 'menu/cart.html', {'cart': cart})
 

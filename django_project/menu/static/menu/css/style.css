@@ -1,7 +1,58 @@
-.card-img-top {
-    width: 100%;  /* Заставляет изображение растягиваться на всю ширину карточки */
-    height: 200px;  /* Устанавливает фиксированную высоту для всех изображений */
-    object-fit: cover;  /* Обрезает изображение, чтобы оно полностью заполняло контейнер */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+/* Основной стиль кнопки корзины */
+.cart-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff8c00;
+    color: white;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+}
+/* Ховер-эффект для кнопки корзины */
+.cart-icon:hover {
+    background: #e07b00;
+}
+
+/* стиль контейнера для управления количеством товаров */
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* стиль для кнопки увеличения и уменьшения количества */
+.quantity-btn {
+    border: none;
+    padding: 5px 10px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* стиль для поля отображения количества */
+.quantity {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* стиль для кнопки добавления товара в корзину */
+.add-to-cart {
+    margin-top: 10px;
+    background-color: grey;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
 }

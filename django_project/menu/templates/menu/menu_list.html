@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'menu/css/style.css' %}">
 
 {% block title %}Меню{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'menu/css/style.css' %}">
+
 <div class="container">
     <!-- Фильтр и поиск -->
     <div class="row mt-4">
@@ -26,98 +27,44 @@
 
     <!-- Меню с категориями -->
     <div class="row">
-        <!-- Закуски -->
-        <div class="col-md-4 menu-item snacks">
+        {% for item in menu_items %}
+        <div class="col-md-4 menu-item" data-category="{{ item.category }}">
             <div class="card">
-                <img src="{% static 'menu/images/brucela_tomato.jpg' %}" class="card-img-top" alt="Закуска">
+                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
                 <div class="card-body">
-                    <h5 class="card-title">Брускетта с томатами</h5>
-                    <p class="card-text">Свежие томаты, базилик, оливковое масло.</p>
-                    <p class="price"><strong>Цена: 1200₸</strong></p>
-                </div>
-            </div>
-        </div>
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="price"><strong>Цена: {{ item.price }}₸</strong></p>
 
-        <!-- Основные блюда -->
-        <div class="col-md-4 menu-item main">
-            <div class="card">
-                <img src="{% static 'menu/images/steak_beef.jpg' %}" class="card-img-top" alt="Основное блюдо">
-                <div class="card-body">
-                    <h5 class="card-title">Стейк из говядины</h5>
-                    <p class="card-text">Сочное мясо, приготовленное на гриле.</p>
-                    <p class="price"><strong>Цена: 3200₸</strong></p>
-                </div>
-            </div>
-        </div>
+                    <!-- Поле для выбора количества -->
+                    <div class="quantity-container">
+                        <button class="quantity-btn decrease" data-name="{{ item.name }}">-</button>
+                        <span class="quantity" data-name="{{ item.name }}">1</span>
+                        <button class="quantity-btn increase" data-name="{{ item.name }}">+</button>
+                    </div>
 
-        <!-- Десерты -->
-        <div class="col-md-4 menu-item dessert">
-            <div class="card">
-                <img src="{% static 'menu/images/chees_cake.jpg' %}" class="card-img-top" alt="Десерт">
-                <div class="card-body">
-                    <h5 class="card-title">Чизкейк</h5>
-                    <p class="card-text">Классический чизкейк с ягодами.</p>
-                    <p class="price"><strong>Цена: 1300₸</strong></p>
+                    <!-- Кнопка добавления в корзину -->
+                    <button class="btn btn-primary add-to-cart"
+                            data-name="{{ item.name }}"
+                            data-price="{{ item.price }}">
+                        Добавить в корзину
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 menu-item dessert">
-            <div class="card">
-                <img src="{% static 'menu/images/tiramisu.jpg' %}" class="card-img-top" alt="Десерт">
-                <div class="card-body">
-                    <h5 class="card-title">Тирамису</h5>
-                    <p class="card-text">Нежный десерт с кофейным ароматом.</p>
-                    <p class="price"><strong>Цена: 900₸</strong></p>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Напитки -->
-        <div class="col-md-4 menu-item drinks">
-            <div class="card">
-                <img src="{% static 'menu/images/limonade.jpg' %}" class="card-img-top" alt="Напиток">
-                <div class="card-body">
-                    <h5 class="card-title">Лимонад</h5>
-                    <p class="card-text">Свежевыжатый лимонад с мятой.</p>
-                    <p class="price"><strong>Цена: 1500₸</strong></p>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 
-<!-- Фильтрация и поиск -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const categoryFilter = document.getElementById("categoryFilter");
-        const searchInput = document.getElementById("searchInput");
-        const menuItems = document.querySelectorAll(".menu-item");
+<!-- Иконка корзины -->
+<a href="{% url 'cart' %}" class="cart-icon">
+    <i class="bi bi-cart-fill"></i>
+</a>
 
-        // Фильтр по категориям
-        categoryFilter.addEventListener("change", function () {
-            const selectedCategory = this.value;
-            menuItems.forEach(item => {
-                if (selectedCategory === "all" || item.classList.contains(selectedCategory)) {
-                    item.style.display = "block";
-                } else {
-                    item.style.display = "none";
-                }
-            });
-        });
+<!-- Скрипт для работы корзины -->
+<script src="{% static 'menu/js/cart.js' %}"></script>
 
-        // Поиск по меню
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase();
-            menuItems.forEach(item => {
-                const title = item.querySelector(".card-title").innerText.toLowerCase();
-                if (title.includes(query)) {
-                    item.style.display = "block";
-                } else {
-                    item.style.display = "none";
-                }
-            });
-        });
-    });
-</script>
+<!-- Скрипт для фильтрации по категориям -->
+<script src="{% static 'menu/js/filter.js' %}"></script>
+
 {% endblock %}

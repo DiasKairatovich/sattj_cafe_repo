@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина - Sәttj Cafe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">Ваша корзина</h2>
+    {% if cart %}
+        <ul class="list-group">
+            {% for item, quantity in cart.items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>{{ item }}</strong>
+
+                    <div class="quantity-container">
+                        <button class="quantity-btn decrease" data-name="{{ item }}">-</button>
+                        <span class="quantity">{{ quantity }}</span>
+                        <button class="quantity-btn increase" data-name="{{ item }}">+</button>
+                    </div>
+
+                    <button class="btn btn-danger remove-item" data-name="{{ item }}">Удалить</button>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="#" class="btn btn-success mt-3">Оплатить</a>
+    {% else %}
+        <p>Ваша корзина пуста.</p>
+    {% endif %}
+</div>
+{% endblock %}

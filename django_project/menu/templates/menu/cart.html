@@ -7,10 +7,10 @@
     <h2 class="mt-4">Ваша корзина</h2>
     <div id="cart-container">
         <ul id="cart-items" class="list-group">
-            {% if cart %}
+            {% if cart.items %}
                 {% for item, quantity in cart.items %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ item }} ({{ quantity }})
+                        <span><strong>{{ item }}</strong> ({{ quantity }})</span>
                         <button class="btn btn-danger btn-sm remove-from-cart" data-name="{{ item }}">Удалить</button>
                     </li>
                 {% endfor %}
@@ -18,13 +18,15 @@
                 <p id="empty-cart-message">Ваша корзина пуста.</p>
             {% endif %}
         </ul>
-        {% if cart %}
-            <a href="#" class="btn btn-success mt-3" id="checkout-btn">Оплатить</a>
-        {% else %}
-            <a href="#" class="btn btn-success mt-3" id="checkout-btn" style="display: none;">Оплатить</a>
-        {% endif %}
+
+        <a href="#" class="btn btn-success mt-3" id="checkout-btn" style="{% if not cart.items %}display: none;{% endif %}">
+            Оплатить
+        </a>
     </div>
 </div>
+
+<!-- CSRF-токен -->
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
 <!-- Скрипт для удаления из корзины -->
 <script>
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cartItems = document.getElementById("cart-items");
     const emptyMessage = document.getElementById("empty-cart-message");
     const checkoutBtn = document.getElementById("checkout-btn");
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
     document.querySelectorAll(".remove-from-cart").forEach(button => {
         button.addEventListener("click", function () {
@@ -41,12 +44,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1]
+                    "X-CSRFToken": csrfToken
                 },
                 body: JSON.stringify({ action: "remove", name: name })
             }).then(response => response.json()).then(data => {
-                this.parentElement.remove();
-                if (cartItems.children.length === 0) {
+                this.closest("li").remove();
+
+                if (cartItems.querySelectorAll("li").length === 0) {
                     emptyMessage.style.display = "block";
                     checkoutBtn.style.display = "none";
                 }

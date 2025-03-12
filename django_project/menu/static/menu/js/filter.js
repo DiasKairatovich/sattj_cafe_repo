@@ -1,3 +1,5 @@
+///// Этот файл отвечает за фильтрацию контента для отображения /////
+
 document.addEventListener("DOMContentLoaded", function () {
     let categoryFilter = document.getElementById("categoryFilter");
     let searchInput = document.getElementById("searchInput");

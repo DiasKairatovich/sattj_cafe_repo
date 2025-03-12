@@ -14,8 +14,8 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// Безопасная отправка AJAX-запросов к серверу
-async function sendRequest(action, name, quantity = 1) {
+// Универсальная функция отправки AJAX-запросов к серверу
+async function sendRequest(action, id, quantity = 1) {
     try {
         const response = await fetch("/cart_api/", {
             method: "POST",
@@ -23,7 +23,7 @@ async function sendRequest(action, name, quantity = 1) {
                 "Content-Type": "application/json",
                 "X-CSRFToken": getCookie("csrftoken"),
             },
-            body: JSON.stringify({ action, name, quantity })
+            body: JSON.stringify({ action, id, quantity })
         });
 
         if (!response.ok) {
@@ -37,15 +37,17 @@ async function sendRequest(action, name, quantity = 1) {
     }
 }
 
-// Функции для работы с корзиной
-export function addToCart(name) {
-    return sendRequest("add", name);
+// Добавляет товар в корзину, учитывая выбранное количество
+export function addToCart(id, quantity = 1) {
+    return sendRequest("add", id, quantity);
 }
 
-export function updateCart(name, quantityChange) {
-    return sendRequest("update", name, quantityChange);
+// Устанавливает точное количество товара в корзине
+export function updateCart(id, newQuantity) {
+    return sendRequest("update", id, newQuantity);
 }
 
-export function removeFromCart(name) {
-    return sendRequest("remove", name, 0); // Количество 0, так как товар удаляется
+// Удаляет товар из корзины
+export function removeFromCart(id) {
+    return sendRequest("remove", id);
 }

@@ -29,30 +29,30 @@
     {% if menu_items %}
         <div class="row">
             {% for item in menu_items %}
-            <div class="col-md-4 menu-item" data-id="{{ item.id }}" data-category="{{ item.category }}">
-                <div class="card">
-                    <img src="{% static item.image %}" class="card-img-top" alt="{{ item.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.name }}</h5>
-                        <p class="card-text">{{ item.description }}</p>
-                        <p class="price"><strong>Цена: {{ item.price }}₸</strong></p>
+                <div class="col-md-4 menu-item" data-category="{{ item.category }}">
+                    <div class="card">
+                        <img src="{% static item.image %}" class="card-img-top" alt="{{ item.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <p class="price"><strong>Цена: {{ item.price }}₸</strong></p>
 
-                        <!-- Поле для выбора количества -->
-                        <div class="quantity-container">
-                            <button class="quantity-btn decrease">-</button>
-                            <span class="quantity quantity-display">1</span>
-                            <button class="quantity-btn increase">+</button>
+                            <!-- Поле для выбора количества -->
+                            <div class="quantity-container">
+                                <button class="quantity-btn decrease">-</button>
+                                <span class="quantity quantity-display">1</span>
+                                <button class="quantity-btn increase">+</button>
+                            </div>
+
+                            <!-- Кнопка добавления в корзину -->
+                            <button class="btn btn-primary add-to-cart"
+                                    data-name="{{ item.name }}"
+                                    data-price="{{ item.price }}">
+                                Добавить в корзину
+                            </button>
                         </div>
-
-                        <!-- Кнопка добавления в корзину -->
-                        <button class="btn btn-primary add-to-cart"
-                                data-name="{{ item.name }}"
-                                data-price="{{ item.price }}">
-                            Добавить в корзину
-                        </button>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     {% else %}

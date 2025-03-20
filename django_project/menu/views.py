@@ -16,7 +16,8 @@ MENU_ITEMS = {
 
 def menu_list(request):
     """Рендерит страницу с меню."""
-    return render(request, 'menu/menu_list.html', {'menu_items': MENU_ITEMS})
+    menu_items = [{"name": name, **data} for name, data in MENU_ITEMS.items()]
+    return render(request, 'menu/menu_list.html', {'menu_items': menu_items})
 
 @require_http_methods(["GET", "POST"])
 @csrf_exempt  # Отключаем CSRF для API-запросов

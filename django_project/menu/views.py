@@ -6,17 +6,17 @@ from django.views.decorators.http import require_http_methods
 
 # Данные о меню (в реальном проекте должны быть в БД)
 MENU_ITEMS = {
-    "Брускетта с томатами": {"price": 1200, "category": "snacks", "image": "menu/images/brucela_tomato.jpg"},
-    "Стейк из говядины": {"price": 3200, "category": "main", "image": "menu/images/steak_beef.jpg"},
-    "Чизкейк": {"price": 1300, "category": "dessert", "image": "menu/images/chees_cake.jpg"},
-    "Тирамису": {"price": 900, "category": "dessert", "image": "menu/images/tiramisu.jpg"},
-    "Лимонад": {"price": 1500, "category": "drinks", "image": "menu/images/limonade.jpg"},
-    "Зеленый чай": {"price": 1300, "category": "drinks", "image": "menu/images/tea.jpg"},
+    "1": {"name": "Брускетта с томатами", "price": 1200, "category": "snacks", "image": "menu/images/brucela_tomato.jpg"},
+    "2": {"name": "Стейк из говядины", "price": 3200, "category": "main", "image": "menu/images/steak_beef.jpg"},
+    "3": {"name": "Чизкейк", "price": 1300, "category": "dessert", "image": "menu/images/chees_cake.jpg"},
+    "4": {"name": "Тирамису", "price": 900, "category": "dessert", "image": "menu/images/tiramisu.jpg"},
+    "5": {"name": "Лимонад", "price": 1500, "category": "drinks", "image": "menu/images/limonade.jpg"},
+    "6": {"name": "Зеленый чай", "price": 1300, "category": "drinks", "image": "menu/images/tea.jpg"},
 }
 
 def menu_list(request):
     """Рендерит страницу с меню."""
-    menu_items = [{"name": name, **data} for name, data in MENU_ITEMS.items()]
+    menu_items = [{"id": item_id, **data} for item_id, data in MENU_ITEMS.items()]
     return render(request, 'menu/menu_list.html', {'menu_items': menu_items})
 
 @require_http_methods(["GET", "POST"])
@@ -35,21 +35,21 @@ def cart_api(request):
         return JsonResponse({"error": "Неверный формат JSON"}, status=400)
 
     action = data.get("action")
-    name = data.get("name")
     quantity = int(data.get("quantity", 1))
 
-    if not name or name not in MENU_ITEMS:
-        return JsonResponse({"error": "Неверное название товара"}, status=400)
+    item_id = str(data.get("id"))  # ID будет строкой, чтобы избежать проблем
+    if not item_id or item_id not in MENU_ITEMS:
+        return JsonResponse({"error": "Неверный ID товара"}, status=400)
 
     if action == "add":
-        cart[name] = cart.get(name, 0) + quantity
+        cart[item_id] = cart.get(item_id, 0) + quantity
     elif action == "remove":
-        cart.pop(name, None)
+        cart.pop(item_id, None)
     elif action == "update":
-        if name in cart:
-            cart[name] = max(0, quantity)  # Теперь обновляет четко до `quantity`
-            if cart[name] == 0:
-                del cart[name]
+        if item_id in cart:
+            cart[item_id] = max(0, quantity)  # Теперь обновляет четко до `quantity`
+            if cart[item_id] == 0:
+                del cart[item_id]
 
     request.session["cart"] = cart
     request.session.modified = True
@@ -60,6 +60,10 @@ def cart_api(request):
 def cart_view(request):
     """Рендерит страницу корзины."""
     cart = request.session.get("cart", {})
-    cart_items = {name: {"quantity": quantity, **MENU_ITEMS[name]} for name, quantity in cart.items() if name in MENU_ITEMS}
+
+    cart_items = {
+        item_id: {"quantity": quantity, **MENU_ITEMS[item_id]}
+        for item_id, quantity in cart.items() if item_id in MENU_ITEMS
+    }
 
     return render(request, "menu/cart.html", {"cart": cart_items})

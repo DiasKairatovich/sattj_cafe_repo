@@ -1,6 +1,6 @@
 ///// Этот файл отвечает за взаимодействие фронтенда с бэкендом /////
 
-// Получение CSRF-токена из куки
+// Получение CSRF-токена
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {

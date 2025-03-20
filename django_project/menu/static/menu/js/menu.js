@@ -34,8 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const response = await addToCart(itemId, quantity);
                 console.log("Товар добавлен в корзину:", response);
 
-                // После успешного добавления товара, вместо сброса количества — устанавливаем его в актуальное значение из корзины
-                quantity = response.cart[itemId] || 1;
+                quantity = response.cart[itemId] ?? 1; // Обновляем количество на фронте
                 quantitySpan.textContent = quantity;
             } catch (error) {
                 console.error("Ошибка при добавлении в корзину:", error);

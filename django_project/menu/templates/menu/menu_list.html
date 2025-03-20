@@ -46,6 +46,7 @@
 
                             <!-- Кнопка добавления в корзину -->
                             <button class="btn btn-primary add-to-cart"
+                                    data-id="{{ item.id }}"
                                     data-name="{{ item.name }}"
                                     data-price="{{ item.price }}">
                                 Добавить в корзину
@@ -67,6 +68,6 @@
 
 <!-- Скрипты -->
 <script src="{% static 'menu/js/filter.js' %}" defer></script>
-<script src="{% static 'menu/js/menu.js' %}" defer></script>
+<script type="module" src="{% static 'menu/js/menu.js' %}" defer></script>
 
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Корзина - Sәttj Cafe{% endblock %}
 
@@ -7,11 +8,13 @@
     <h2 class="mt-4">Ваша корзина</h2>
     <div id="cart-container">
         <ul id="cart-items" class="list-group">
-            {% if cart.items %}
-                {% for item, quantity in cart.items %}
+            {% if cart %}
+                {% for item_id, item_data in cart.items %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><strong>{{ item }}</strong> ({{ quantity }})</span>
-                        <button class="btn btn-danger btn-sm remove-from-cart" data-name="{{ item }}">Удалить</button>
+                        <span>
+                            <strong>{{ item_data.name }}</strong> ({{ item_data.quantity }})
+                        </span>
+                        <button class="btn btn-danger btn-sm remove-from-cart" data-id="{{ item_id }}">Удалить</button>
                     </li>
                 {% endfor %}
             {% else %}
@@ -28,36 +31,7 @@
 <!-- CSRF-токен -->
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-<!-- Скрипт для удаления из корзины -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const cartItems = document.getElementById("cart-items");
-    const emptyMessage = document.getElementById("empty-cart-message");
-    const checkoutBtn = document.getElementById("checkout-btn");
-    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
-    document.querySelectorAll(".remove-from-cart").forEach(button => {
-        button.addEventListener("click", function () {
-            const name = this.getAttribute("data-name");
-
-            fetch("/cart_api/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken
-                },
-                body: JSON.stringify({ action: "remove", name: name })
-            }).then(response => response.json()).then(data => {
-                this.closest("li").remove();
-
-                if (cartItems.querySelectorAll("li").length === 0) {
-                    emptyMessage.style.display = "block";
-                    checkoutBtn.style.display = "none";
-                }
-            });
-        });
-    });
-});
-</script>
+<!-- Подключаем скрипт в котором есть функция для удаления из корзины -->
+<script src="{% static 'menu/js/cart.js' %}"></script>
 
 {% endblock %}
